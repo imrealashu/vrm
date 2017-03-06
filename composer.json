@@ -1,0 +1,20 @@
+{
+  "name": "listbees/vrm",
+  "description": "Visual Route Manager for Laravel 5.*",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Krunal Dodiya",
+      "email": "admin@listbees.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Listbees\\VRM\\": "src/"
+    }
+  },
+  "minimum-stability": "dev",
+  "require": {
+    "illuminate/support": "^5.4"
+  }
+}

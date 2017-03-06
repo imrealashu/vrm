@@ -1,0 +1,165 @@
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+nav {
+    background: #fdfdfd !important;
+}
+
+.controller-list {
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+    background: #fdfdfd;
+    margin: 1px;
+}
+
+.controller-list:first-child {
+    border-top: 1px solid #eee;
+}
+
+.controller-list:last-child {
+    border-bottom: none;
+}
+
+.controller-list.is-active a {
+    color: #ff1f4b;
+}
+
+pre {
+    font-size: 18px !important;
+    line-height: 28px !important;
+    background: none !important;
+    font-size: 16px;
+    padding: 5px;
+    display: block;
+    white-space: inherit
+}
+
+pre span {
+    margin: 0px -5px 0px -5px;
+}
+
+table {
+    border-color: #EEEEEE;
+}
+
+table td {
+    background: #fdfdfd !important;
+    border: 1px solid #eee !important;
+}
+
+/* design layout */
+.design-layout td {
+    background: #fffff5 !important
+}
+
+.design-layout:hover {
+    background: lightgoldenrodyellow !important;
+}
+
+.editable {
+    color: #3273dc;
+}
+
+.editable:hover {
+    background: yellow;
+    cursor: pointer;
+}
+
+pre .is-active, pre .is-active:hover {
+    background: #ffdd57;
+}
+
+.info {
+    position: absolute;
+    background: white;
+    border: 1px solid #eee;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.info:before {
+    position: absolute;
+    content: "\25BC";
+    color: #eee;
+    margin-top: -29px;
+    margin-left: 20px;
+    transform: rotate(180deg);
+    font-size: 22px;
+}
+
+pre .method {
+    margin-left: 45px !important;
+}
+
+pre .path {
+    margin-left: 90px !important;
+}
+
+pre .path-input {
+    width: 300px !important;
+}
+
+pre .as {
+    margin-left: 185px !important;
+}
+
+pre .controller {
+    margin-left: 205px !important;
+}
+
+pre .controller-input {
+    width: 300px !important;
+}
+
+pre .action {
+    margin-left: 330px !important;
+}
+
+pre .middlewares {
+    margin-left: 167px !important;
+}
+
+.as-separator {
+    margin-left: 105px;
+    margin-right: 10px;
+}
+
+.uses-separator {
+    margin-left: 86px;
+    margin-right: 10px;
+}
+
+.middlewares-separator {
+    margin-left: 16px;
+    margin-right: 10px;
+}
+
+.route-segment {
+    color: #c71212;
+}
+
+.method-segment {
+    color: #000;
+}
+
+.path-segment {
+    color: #04b704;
+}
+
+.as-segment {
+    color: #3273dc;
+    margin-left: 30px
+}
+
+.uses-segment {
+    color: #3273dc;
+    margin-left: 30px
+}
+
+.middlewares-segment {
+    color: #3273dc;
+    margin-left: 30px
+}
