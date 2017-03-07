@@ -46,21 +46,7 @@
                 <span>"uses"</span><span class="uses-separator">=></span>
             </span>
             <span>"</span>
-            <span class="editable" :class="{'is-active': isActive('Controller')}"
-            @click="setRouteData('Controller')" v-text="designLayout.controller.name"></span>
-            <div class="info controller" v-if="isActive('Controller')">
-                <input class="input controller-input" placeholder="Namespace"
-                       v-model="designLayout.namespace" @keydown.enter.prevent="hideActive()"/>
-                <div style="padding: 6px; font-size: 14px;">
-                    <span class="select">
-                        <select @change.prevent="applyController($event)" style="width: 300px">
-                            <option :value="JSON.stringify(controller)" v-for="controller in controllers"
-                                    :selected="designLayout.controller.id == controller.id"
-                                    v-text="controller.name"></option>
-                        </select>
-                    </span>
-                </div>
-            </div>
+            <span style="color: #3273dc;" v-text="designLayout.controller.name"></span>
             <span style="color: #c71212;">@</span>
 
             <span class="editable" :class="{'is-active': isActive('Action')}"

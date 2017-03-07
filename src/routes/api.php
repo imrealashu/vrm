@@ -1,7 +1,6 @@
-<?php
-
-Route::get("demo", [
+<?php 
+Route::get("account/demo", [
     "as"            => "demo",
     "uses"          => "PagesController@demo",
-    "middlewares"   => []
+    "middlewares"   => [],
 ]);

@@ -7,14 +7,7 @@ use Listbees\VRM\Http\Middleware\VRMAuth;
 
 class VisualRouteManagerServiceProvider extends ServiceProvider
 {
-    /**
-     * This namespace is applied to your controller routes.
-     *
-     * In addition, it is set as the URL generator's root namespace.
-     *
-     * @var string
-     */
-    protected $namespace = 'Listbees\VRM\Http\Controllers';
+    protected $vrm_namespace = 'Listbees\VRM\Http\Controllers';
     protected $commands = [
         InstallVRM::class,
     ];
@@ -79,7 +72,7 @@ class VisualRouteManagerServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes()
     {
-        Route::namespace($this->namespace)
+        Route::namespace($this->getNamespace())
             ->middleware('web')
             ->prefix(null)
             ->group(__DIR__ . '/../routes/web.php');
@@ -94,7 +87,7 @@ class VisualRouteManagerServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
-        Route::namespace($this->namespace)
+        Route::namespace($this->getNamespace())
             ->middleware('api')
             ->prefix('api')
             ->group(__DIR__ . '/../routes/api.php');
@@ -102,9 +95,16 @@ class VisualRouteManagerServiceProvider extends ServiceProvider
 
     private function mapVRMRoutes()
     {
-        Route::namespace($this->namespace)
+        Route::namespace($this->vrm_namespace)
             ->middleware(['web', 'vrm-auth'])
             ->prefix('vrm')
             ->group(__DIR__ . '/../routes/vrm.php');
+    }
+
+    private function getNamespace()
+    {
+        $app = config('vrm.namespace') ? config('vrm.namespace') : 'App';
+
+        return $app . '\Http\Controllers';
     }
 }

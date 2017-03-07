@@ -46,7 +46,6 @@ class HomeController extends Controller
         // add routes detail
         $route = ($type == "edit") ? VrmRoutes::find($data["id"]) : new VrmRoutes();
         $route->middlewares_group_id = $data["middlewares_group_id"];
-        $route->namespace = $data["namespace"];
         $route->path = trim($data["path"], "/");
         $route->full_path = $path;
         $route->prefix_id = count($data["prefix"]) ? $data["prefix"]["id"] : 0;
@@ -85,7 +84,7 @@ class HomeController extends Controller
         $file_path = __DIR__ . "/../../routes/$file_name";
 
         $routes = VrmRoutes::with('controller', 'middlewares', 'prefix')->where(['middlewares_group_id' => $group->id])->get();
-        $view = "<?php \r\n" . view('vrm::route_file_design', ['routes' => $routes])->render();
+        $view = "<?php \r\n" . view('vrm::route_template', ['routes' => $routes])->render();
         $template = str_replace("&quot;", '"', $view);
 
         File::put($file_path, $template);

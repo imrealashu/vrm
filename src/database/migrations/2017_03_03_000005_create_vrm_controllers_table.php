@@ -16,6 +16,7 @@ class CreateVRMControllersTable extends Migration
         Schema::create('vrm_controllers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('namespace');
             $table->timestamps();
             $table->tinyInteger('status')->default(1);
         });

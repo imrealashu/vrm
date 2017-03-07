@@ -71,7 +71,6 @@
                     middlewares: [],
                     prefixes: [],
                     designLayout: {
-                        namespace: 'App\\Http\\Controller',
                         method: 'get',
                         path: 'demo',
                         action: 'demo',
@@ -129,7 +128,6 @@
                     this.designLayout.as = route.as;
                     this.designLayout.controller = route.controller;
                     this.designLayout.action = route.action;
-                    this.designLayout.namespace = route.namespace;
                     this.designLayout.method = route.method;
                     this.designLayout.middlewares_group_id = route.middlewares_group_id;
 

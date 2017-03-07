@@ -6,7 +6,7 @@ class VrmControllers extends Model
 {
     protected $table = 'vrm_controllers';
 
-    protected $fillable = ['name', 'status'];
+    protected $fillable = ['name', 'namespace', 'status'];
 
     protected $dates = ['created_at', 'updated_at'];
 
