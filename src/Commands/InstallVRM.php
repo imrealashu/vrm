@@ -19,9 +19,9 @@ class InstallVRM extends Command
      * @var string
      */
 
-    protected $name = 'vrm:generate';
+    protected $name = 'vrm:make';
 
-    protected $description = 'Generate VisualRouteManager Admin User.';
+    protected $description = 'Generate VisualRouteManager Admin Panel.';
 
     /**
      * Create a new command instance.
@@ -41,47 +41,20 @@ class InstallVRM extends Command
 
     public function fire()
     {
-        $password = $this->option('password');
-        if (strlen($password) < 4) return $this->info('Password is very insecure, make sure to have at-least 4 characters.');
+        // delete middlewares, middlewares groups to prevent duplication
+        VrmMiddlewaresGroup::truncate();
+        VrmMiddlewares::truncate();
+        // create default middleware groups [web, api]
+        VrmMiddlewaresGroup::insert([['name' => 'web', 'prefix' => ''], ['name' => 'api', 'prefix' => 'api']]);
+        // create default middlewares
+        VrmMiddlewares::insert([['name' => 'guest'], ['name' => 'auth'], ['name' => 'auth:api'], ['name' => 'auth.basic']]);
+        // create default controller
+        $controller = VrmControllers::firstOrCreate(['name' => 'PagesController']);
 
-        $data = json_encode(["hash" => Hash::make($password)]);
-        if (Storage::put('vrm-password.json', $data)) {
-            // delete middleware groups to prevent duplication
-            VrmMiddlewaresGroup::truncate();
-            // create default middleware groups [web, api]
-            VrmMiddlewaresGroup::insert([['name' => 'web', 'prefix' => ''], ['name' => 'api', 'prefix' => 'api']]);
-            // create default middlewares
-            VrmMiddlewares::insert([['name' => 'guest'], ['name' => 'auth'], ['name' => 'auth:api'], ['name' => 'auth.basic']]);
-            // create default controller
-            VrmControllers::firstOrCreate(['name' => 'PagesController']);
-
+        if ($controller) {
             return $this->info('Congratulations!!! User created, you can add routes now.');
         }
 
         return $this->warn('Ooops!!! somthing bad happended.');
-    }
-
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [
-            ['password', InputArgument::OPTIONAL, 'An example argument.'],
-        ];
-    }
-
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
-            ['password', null, InputOption::VALUE_OPTIONAL, 'An example option.', null],
-        ];
     }
 }

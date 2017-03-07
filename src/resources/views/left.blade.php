@@ -13,21 +13,21 @@
         </p>
 
         <div class="controller-wrapper">
-            @foreach($controllers as $data)
-                <div class="controller-list @if ($data['id'] == $controller_id) is-active @endif">
-                    <a href="/vrm/?middlewares_group_id={{$middlewares_group_id}}&controller_id={{ $data['id'] }}">
-                        {{ $data['name'] }}
-                    </a>
-                </div>
-            @endforeach
+            <div class="controller-list" :class="{'is-active' : designLayout.controller.id == controller.id}"
+                 v-for="controller in controllers">
+                <a :href="getLeftNavLink()">
+                    @{{ controller.name }}
+                </a>
+            </div>
         </div>
     </div>
 
     <div style="border: 1px solid #eee; margin-top: 10px; padding: 5px;">
         <div class="controller has-text-centered">
-            <input class="input" placeholder="Namespace (optional)" @keydown.enter.prevent="hideActive()"/>
+            <input class="input" placeholder="Namespace (optional)" v-model="credentials.controller.namespace"/>
             <div style="margin-top: 5px">
-                <input class="input" placeholder="Add Controller" @keydown.enter.prevent="AddController()"/>
+                <input class="input" placeholder="Add Controller" v-model="credentials.controller.name"
+                       @keydown.enter.prevent="addController()"/>
             </div>
         </div>
     </div>

@@ -39,3 +39,8 @@ Route::post('route-data/add', [
     'as' => 'vrm-add-route-data',
     'uses' => 'HomeController@addRouteData'
 ]);
+
+Route::post('controller/add', [
+    'as' => 'vrm-add-controller',
+    'uses' => 'HomeController@addController'
+]);

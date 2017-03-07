@@ -14,8 +14,8 @@
                     <div class="column">
                         <div class="columns">
                             <div v-if="show_design_layout" class="column is-5">
-                                <button class="button is-danger" :class="{'is-disable': loading}" @click="cancelAddRoute
-                                ">Cancel</button>
+                                <button class="button is-danger" :class="{'is-disable': loading}"
+                                @click="cancelAddRoute">Cancel</button>
                                 <button class="button is-success" :class="{'is-loading': loading}" @click="addRoute">
                                 Save</button>
                             </div>
@@ -80,12 +80,25 @@
                         middlewares_group_id: {!! $middlewares_group_id !!},
                         middleware_ids: [],
                         middleware_names: []
+                    },
+                    credentials: {
+                        controller: {
+                            namespace: '',
+                            name: ''
+                        }
                     }
                 }
             },
             methods: {
                 isActive(data){
                     return this.currentLayout.name == data;
+                },
+
+                addController(){
+                    axios.post('/vrm/controller/add', this.credentials.controller).then((response) => {
+                        this.controllers.push(response.data.controller);
+                        this.credentials.controllers = {};
+                    });
                 },
 
                 hideActive(){
@@ -126,6 +139,7 @@
                     this.designLayout.prefix = route.prefix;
                     this.designLayout.path = route.path;
                     this.designLayout.as = route.as;
+                    this.designLayout.namespace = route.controller.namespace;
                     this.designLayout.controller = route.controller;
                     this.designLayout.action = route.action;
                     this.designLayout.method = route.method;
@@ -166,6 +180,10 @@
 
                         data[type].push(response.data.result);
                     });
+                },
+
+                getLeftNavLink(){
+                    return `/vrm/?middlewares_group_id=${this.middlewares_group_id}&controller_id=${this.designLayout.controller.id}`;
                 },
 
                 getFullPath(){

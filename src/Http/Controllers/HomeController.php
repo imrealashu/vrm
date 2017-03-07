@@ -63,6 +63,13 @@ class HomeController extends Controller
         return $route ? response(['success' => true], 200) : response(['success' => false], 400);
     }
 
+    public function addController(Request $request)
+    {
+        $controller = VrmControllers::firstOrCreate($request->all());
+
+        return response(['controller' => $controller]);
+    }
+
     public function addRouteData(Request $request)
     {
         $type = $request->get('type');

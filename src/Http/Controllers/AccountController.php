@@ -22,13 +22,9 @@ class AccountController extends Controller
     public function processLogin(Request $request)
     {
         $password = $request->password;
+        $hash = config('vrm.password');
 
-        $data = json_decode(Storage::get('vrm-password.json'), true);
-        $hash = $data['hash'];
-
-        if ( ! Hash::check($password, $hash)) {
-            return redirect()->route('vrm-login')->with(['message' => 'The password is wrong.']);
-        }
+        if ($password != $hash) return redirect()->route('vrm-login')->with(['message' => 'The password is wrong.']);
 
         session(['vrm-admin' => true]);
         return redirect()->route('vrm-home');
