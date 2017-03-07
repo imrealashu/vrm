@@ -17,8 +17,8 @@ class CreateVRMRoutesTable extends Migration
             $table->increments('id');
             $table->integer('prefix_id')->nullable();
             $table->integer('middlewares_group_id');
-            $table->string('where');
-            $table->string('domain');
+            $table->string('where')->nullable();
+            $table->string('domain')->nullable();
             $table->string('namespace');
             $table->string('path');
             $table->string('full_path');

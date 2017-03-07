@@ -95,7 +95,11 @@
                 },
 
                 showRouteData(){
-                    return (['Controller', 'Middlewares', 'Prefix'].indexOf(this.currentLayout.name) > -1) ? true : false;
+                    if (this.currentLayout.name.length) {
+                        return (['Middlewares', 'Prefix'].indexOf(this.currentLayout.name) > -1) ? true : false;
+                    }
+
+                    return false;
                 },
 
                 setRouteData(data){
@@ -112,7 +116,7 @@
                 deleteRoute(route){
                     axios.post('/vrm/delete', {id: route.id}).then((response) => {
                         this.loading = false;
-                        location.reload();
+//                        location.reload();
                     }).catch(function (error) {
                         this.loading = false;
                     });
@@ -142,7 +146,7 @@
 
                     axios.post('/vrm/create', this.designLayout).then((response) => {
                         this.loading = false;
-                        window.location = `/vrm/?middlewares_group_id=${this.designLayout.middlewares_group_id}&controller_id=${this.designLayout.controller.id}`;
+//                        window.location = `/vrm/?middlewares_group_id=${this.designLayout.middlewares_group_id}&controller_id=${this.designLayout.controller.id}`;
                     }).catch(function (error) {
                         this.loading = false;
                     });

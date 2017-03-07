@@ -30,15 +30,16 @@ class HomeController extends Controller
 
     public function delete(Request $request)
     {
-        $route = VrmRoutes::find($request->id);
-        $this->updateRouteFile($route, 'delete');
+        $route = VrmRoutes::with('group')->find($request->id);
+        if ($route->delete()) $this->updateRouteFile($route->group);
 
-        return $route->delete() ? response(['success' => true], 200) : response(['success' => false], 400);
+        return $route ? response(['success' => true], 200) : response(['success' => false], 400);
     }
 
     public function store(AddRouteRequest $request)
     {
         $data = $request->all();
+
         $path = (count($data["prefix"]) && $data["prefix"]["id"] > 0) ? $data["prefix"]["name"] . "/" . trim($data["path"], "/") : trim($data["path"], "/");
         $type = isset($data["id"]) ? "edit" : "create";
 
@@ -58,11 +59,8 @@ class HomeController extends Controller
         // attach middleware to routes in pivot table
         VrmRoutes::find($route["id"])->middlewares()->detach();
         VrmRoutes::find($route["id"])->middlewares()->attach($data['middleware_ids']);
-        $routeToFile = VrmRoutes::with('controller', 'middlewares', 'prefix', 'group')
-            ->where(['id' => $route["id"]])
-            ->first();
 
-        $this->updateRouteFile($routeToFile, $type);
+        $this->updateRouteFile($route->group);
         return $route ? response(['success' => true], 200) : response(['success' => false], 400);
     }
 
@@ -81,27 +79,15 @@ class HomeController extends Controller
         return response(['result' => $data]);
     }
 
-    public function updateRouteFile($route, $type = 'create')
+    public function updateRouteFile($group)
     {
-        $id = $route->id;
-        $file_name = "{$route->group['name']}.php";
+        $file_name = "{$group->name}.php";
         $file_path = __DIR__ . "/../../routes/$file_name";
-        $file_contents = File::get($file_path);
-        $stringToWrite = ($type == 'delete') ? "" : $this->getTemplate($route);
 
-        if ($type == 'create') {
-            $data = $stringToWrite;
-            File::append($file_path, $data);
-        } else {
-            preg_match("/#route_start_$id((.|\s)+?)#route_end_$id/", $file_contents, $match);
-            $data = str_replace($match[0], $stringToWrite, $file_contents);
-            File::put($file_path, $data);
-        }
-    }
+        $routes = VrmRoutes::with('controller', 'middlewares', 'prefix')->where(['middlewares_group_id' => $group->id])->get();
+        $view = "<?php \r\n" . view('vrm::route_file_design', ['routes' => $routes])->render();
+        $template = str_replace("&quot;", '"', $view);
 
-    protected function getTemplate($route)
-    {
-        $view = view('vrm::route_file_design', ['route' => $route])->render();
-        return str_replace("&quot;", '"', "\n#route_start_$route->id\n$view\n#route_end_$route->id\n");
+        File::put($file_path, $template);
     }
 }
