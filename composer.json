@@ -13,7 +13,6 @@
       "Listbees\\VRM\\": "src/"
     }
   },
-  "minimum-stability": "0.1.0",
   "require": {
     "illuminate/support": "^5.4"
   }
