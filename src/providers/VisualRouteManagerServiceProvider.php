@@ -8,16 +8,14 @@ use Listbees\VRM\Http\Middleware\VRMAuth;
 class VisualRouteManagerServiceProvider extends ServiceProvider
 {
     protected $vrm_namespace = 'Listbees\VRM\Http\Controllers';
-    protected $commands = [
-        InstallVRM::class,
-    ];
+    protected $commands = [InstallVRM::class];
     protected $migrations = [
-        'database/migrations/2017_03_03_000000_create_vrm_routes_table.php',
-        'database/migrations/2017_03_03_000000_create_vrm_middlewares_group_table.php',
-        'database/migrations/2017_03_03_000000_create_vrm_middlewares_table.php',
-        'database/migrations/2017_03_03_000000_create_vrm_controllers_table.php',
-        'database/migrations/2017_03_03_000000_create_vrm_prefixes_table.php',
-        'database/migrations/2017_03_03_000000_create_vrm_middlewares_vrm_routes_table.php'
+        '2017_03_03_000001_create_vrm_routes_table.php',
+        '2017_03_03_000002_create_vrm_prefixes_table.php',
+        '2017_03_03_000003_create_vrm_middlewares_table.php',
+        '2017_03_03_000004_create_vrm_middlewares_group_table.php',
+        '2017_03_03_000005_create_vrm_controllers_table.php',
+        '2017_03_03_000006_create_vrm_middlewares_vrm_routes_table.php'
     ];
 
     public function register()
@@ -43,15 +41,15 @@ class VisualRouteManagerServiceProvider extends ServiceProvider
         $this->mapWebRoutes();
 
         // loading views
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'vrm');
+        $this->loadViewsFrom($this->getPackagePath('resources/views'), 'vrm');
 
         $data = [
-            __DIR__ . "/../" . $this->migrations[0] => base_path($this->migrations[0]),
-            __DIR__ . "/../" . $this->migrations[1] => base_path($this->migrations[1]),
-            __DIR__ . "/../" . $this->migrations[2] => base_path($this->migrations[2]),
-            __DIR__ . "/../" . $this->migrations[3] => base_path($this->migrations[3]),
-            __DIR__ . "/../" . $this->migrations[4] => base_path($this->migrations[4]),
-            __DIR__ . "/../" . $this->migrations[5] => base_path($this->migrations[5]),
+            $this->getPackagePath('database/migrations') . $this->migrations[0] => base_path($this->migrations[0]),
+            $this->getPackagePath('database/migrations') . $this->migrations[1] => base_path($this->migrations[1]),
+            $this->getPackagePath('database/migrations') . $this->migrations[2] => base_path($this->migrations[2]),
+            $this->getPackagePath('database/migrations') . $this->migrations[3] => base_path($this->migrations[3]),
+            $this->getPackagePath('database/migrations') . $this->migrations[4] => base_path($this->migrations[4]),
+            $this->getPackagePath('database/migrations') . $this->migrations[5] => base_path($this->migrations[5]),
         ];
 
         // publish migration files
@@ -59,7 +57,7 @@ class VisualRouteManagerServiceProvider extends ServiceProvider
 
         // publish style files
         $this->publishes([
-            __DIR__ . '/../resources/assets' => public_path('vendor/vrm')
+            $this->getPackagePath('resources/assets') => public_path('vendor/vrm')
         ], 'public');
     }
 
@@ -75,7 +73,7 @@ class VisualRouteManagerServiceProvider extends ServiceProvider
         Route::namespace($this->getNamespace())
             ->middleware('web')
             ->prefix(null)
-            ->group(__DIR__ . '/../routes/web.php');
+            ->group($this->getPackagePath('routes/web.php'));
     }
 
     /**
@@ -90,21 +88,26 @@ class VisualRouteManagerServiceProvider extends ServiceProvider
         Route::namespace($this->getNamespace())
             ->middleware('api')
             ->prefix('api')
-            ->group(__DIR__ . '/../routes/api.php');
+            ->group($this->getPackagePath('routes/api.php'));
     }
 
-    private function mapVRMRoutes()
+    protected function mapVRMRoutes()
     {
         Route::namespace($this->vrm_namespace)
             ->middleware(['web', 'vrm-auth'])
             ->prefix('vrm')
-            ->group(__DIR__ . '/../routes/vrm.php');
+            ->group($this->getPackagePath('routes/vrm.php'));
     }
 
-    private function getNamespace()
+    protected function getNamespace()
     {
         $app = config('vrm.namespace') ? config('vrm.namespace') : 'App';
 
         return $app . '\Http\Controllers';
+    }
+
+    protected function getPackagePath($path = '')
+    {
+        return __DIR__ . "/../" . rtrim($path, "/") . "/";
     }
 }
