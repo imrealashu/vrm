@@ -1,7 +1,7 @@
 # Visual Route Manager
-Visual Route Manager is a web interface to manage your Laravel 5.* routes 
-using this service, you can easily add, remove, edit routes also filter them 
-accordingly your needs, If your **App / website** is large scalded then it will 
+Visual Route Manager is a web interface to manage your Laravel 5.* routes. 
+Using VRM, you can easily add, edit, remove routes also filter them 
+accordingly your needs, If your **App / website** is large scaled then it will 
 help a lot to manage your routes.
 
 It's in active development and still lack of some features like Resources and Function 
