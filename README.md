@@ -14,7 +14,7 @@ How to use
 install package through composer
 
 ``
-composer require listbees/vrm : 0.1.*
+composer require listbees/vrm
 ``
 
 ##### step 2
