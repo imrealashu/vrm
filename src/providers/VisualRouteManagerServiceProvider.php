@@ -55,13 +55,13 @@ class VisualRouteManagerServiceProvider extends ServiceProvider
 
         // publish style files
         $this->publishes([
-            $this->getPackagePath() . 'resources/assets' => public_path('vendor/vrm.php')
+            $this->getPackagePath() . 'resources/assets' => public_path('vendor/vrm')
         ], 'public');
 
         // publish config file
         $this->publishes([
-            $this->getPackagePath() . 'config/vrm.php' => base_path('config/vrm')
-        ], 'public');
+            $this->getPackagePath() . 'config/vrm.php' => base_path('config/vrm.php')
+        ]);
     }
 
     /**
