@@ -2,6 +2,6 @@
 
 return [
     'path' => 'vrm',
-    'namespace' => 'App\Http\Controllers',
+    'namespace' => 'App',
     'password' => env('VRM_PASSWORD', 'secret')
 ];
