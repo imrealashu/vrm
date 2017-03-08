@@ -12,7 +12,9 @@
 
             <span>(</span>
 
-            <span class="path-segment">"{{$route->full_path}}"</span>
+            <span class="path-segment">
+                "{{$middlewares_group->prefix ? $middlewares_group->prefix . '/' : ''}}{{$route->full_path}}"
+            </span>
 
             <span>, [</span>
             <br/>

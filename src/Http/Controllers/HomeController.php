@@ -7,6 +7,7 @@ use Listbees\VRM\Http\Requests\AddRouteRequest;
 use Listbees\VRM\Http\Testing;
 use Listbees\VRM\VrmMiddlewares;
 use Listbees\VRM\VrmControllers;
+use Listbees\VRM\VrmMiddlewaresGroup;
 use Listbees\VRM\VrmPrefixes;
 use Listbees\VRM\VrmRoutes;
 
@@ -16,8 +17,9 @@ class HomeController extends Controller
     {
         $controller_id = ($request->controller_id) ? $request->controller_id : 1;
         $middlewares_group_id = ($request->middlewares_group_id) ? $request->middlewares_group_id : 1;
+        $middlewares_group = VrmMiddlewaresGroup::find($middlewares_group_id);
 
-        $routes = VrmRoutes::with('controller', 'middlewares', 'prefix')
+        $routes = VrmRoutes::with('controller', 'middlewares', 'prefix', 'middlewares_group')
             ->where(['controller_id' => $controller_id, 'middlewares_group_id' => $middlewares_group_id])
             ->get();
 
@@ -25,13 +27,13 @@ class HomeController extends Controller
         $middlewares = VrmMiddlewares::get(['id', 'name']);
         $prefixes = VrmPrefixes::get(['id', 'name']);
 
-        return view('vrm::home', compact('routes', 'controllers', 'middlewares', 'prefixes', 'controller_id', 'middlewares_group_id'));
+        return view('vrm::home', compact('routes', 'controllers', 'middlewares', 'prefixes', 'controller_id', 'middlewares_group'));
     }
 
     public function delete(Request $request)
     {
         $route = VrmRoutes::with('group')->find($request->id);
-        if ($route->delete()) $this->updateRouteFile($route->group);
+        if ($route->delete()) $this->updateRouteFile($route->middlewares_group);
 
         return $route ? response(['success' => true], 200) : response(['success' => false], 400);
     }
@@ -45,7 +47,7 @@ class HomeController extends Controller
 
         // add routes detail
         $route = ($type == "edit") ? VrmRoutes::find($data["id"]) : new VrmRoutes();
-        $route->middlewares_group_id = $data["middlewares_group_id"];
+        $route->middlewares_group_id = $data["middlewares_group"]["id"];
         $route->path = trim($data["path"], "/");
         $route->full_path = $path;
         $route->prefix_id = count($data["prefix"]) ? $data["prefix"]["id"] : 0;
@@ -59,7 +61,7 @@ class HomeController extends Controller
         VrmRoutes::find($route["id"])->middlewares()->detach();
         VrmRoutes::find($route["id"])->middlewares()->attach($data['middleware_ids']);
 
-        $this->updateRouteFile($route->group);
+        $this->updateRouteFile($route->middlewares_group);
         return $route ? response(['success' => true], 200) : response(['success' => false], 400);
     }
 

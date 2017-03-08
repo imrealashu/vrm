@@ -27,7 +27,7 @@ class VrmRoutes extends Model
         return $this->hasOne(VrmPrefixes::class, 'id', 'prefix_id');
     }
 
-    public function group()
+    public function middlewares_group()
     {
         return $this->belongsTo(VrmMiddlewaresGroup::class, 'middlewares_group_id');
     }

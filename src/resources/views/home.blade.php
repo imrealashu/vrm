@@ -38,9 +38,15 @@
                         @include('vrm::design')
                     </tr>
 
-                    @foreach($routes as $route)
-                        @include('vrm::routes')
-                    @endforeach
+                    @if($routes->count())
+                        @foreach($routes as $route)
+                            @include('vrm::routes')
+                        @endforeach
+                    @else
+                        <tr>
+                            <td>No Routes Found.</td>
+                        </tr>
+                    @endif
                 </table>
             </div>
         </div>
@@ -57,6 +63,7 @@
                 this.prefixes = {!! $prefixes !!};
 
                 this.designLayout.controller = {!! $controllers[0] !!};
+                this.designLayout.middlewares_group = {!! $middlewares_group !!}
             },
             data(){
                 return {
@@ -77,7 +84,7 @@
                         as: 'demo',
                         prefix: {},
                         controller: {},
-                        middlewares_group_id: {!! $middlewares_group_id !!},
+                        middlewares_group: {},
                         middleware_ids: [],
                         middleware_names: []
                     },
@@ -97,7 +104,7 @@
                 addController(){
                     axios.post('/vrm/controller/add', this.credentials.controller).then((response) => {
                         this.controllers.push(response.data.controller);
-                        this.credentials.controllers = {};
+                        this.credentials.controller.name = '';
                     });
                 },
 
@@ -128,7 +135,7 @@
                 deleteRoute(route){
                     axios.post('/vrm/delete', {id: route.id}).then((response) => {
                         this.loading = false;
-//                        location.reload();
+                        location.reload();
                     }).catch(function (error) {
                         this.loading = false;
                     });
@@ -143,7 +150,7 @@
                     this.designLayout.controller = route.controller;
                     this.designLayout.action = route.action;
                     this.designLayout.method = route.method;
-                    this.designLayout.middlewares_group_id = route.middlewares_group_id;
+                    this.designLayout.middlewares_group = route.middlewares_group;
 
                     route.middlewares.forEach(middleware => {
                         this.designLayout.middleware_ids.push(middleware.id);
@@ -158,7 +165,7 @@
 
                     axios.post('/vrm/create', this.designLayout).then((response) => {
                         this.loading = false;
-//                        window.location = `/vrm/?middlewares_group_id=${this.designLayout.middlewares_group_id}&controller_id=${this.designLayout.controller.id}`;
+                        window.location = `/vrm/?middlewares_group_id=${this.designLayout.middlewares_group.id}&controller_id=${this.designLayout.controller.id}`;
                     }).catch(function (error) {
                         this.loading = false;
                     });
@@ -182,17 +189,21 @@
                     });
                 },
 
-                getLeftNavLink(){
-                    return `/vrm/?middlewares_group_id=${this.middlewares_group_id}&controller_id=${this.designLayout.controller.id}`;
+                getLeftNavLink(middlewares_group_id, controller){
+                    return `/vrm/?middlewares_group_id=${middlewares_group_id}&controller_id=${controller.id}`;
                 },
 
                 getFullPath(){
                     var ds = (this.designLayout.path.length) ? "/" : "";
+                    var middleware_prefix = this.designLayout.middlewares_group ? this.designLayout.middlewares_group.prefix + '/' : '';
+
+                    console.log(this.designLayout);
+
                     var path = (this.designLayout.prefix && this.designLayout.prefix.id > 0)
                         ? this.designLayout.prefix.name + ds + this.designLayout.path
                         : this.designLayout.path;
 
-                    return `"${path}"`;
+                    return `"${middleware_prefix}${path}"`;
                 },
 
                 applyPrefix(e){

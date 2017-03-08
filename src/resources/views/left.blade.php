@@ -6,6 +6,7 @@
             <span class="select">
             <select name="filter_type" id="">
                 @foreach($prefixes as $data)
+                    <option value="0">None</option>
                     <option value="{{ $data['id'] }}">{{ $data['name'] }}</option>
                 @endforeach
             </select>
@@ -13,9 +14,9 @@
         </p>
 
         <div class="controller-wrapper">
-            <div class="controller-list" :class="{'is-active' : designLayout.controller.id == controller.id}"
+            <div class="controller-list" :class="{'is-active' : {!! $controller_id !!} == controller.id}"
                  v-for="controller in controllers">
-                <a :href="getLeftNavLink()">
+                <a :href="getLeftNavLink({!! $middlewares_group["id"] !!}, controller)">
                     @{{ controller.name }}
                 </a>
             </div>
@@ -23,6 +24,10 @@
     </div>
 
     <div style="border: 1px solid #eee; margin-top: 10px; padding: 5px;">
+        <h1 class="title is-4"
+            style="border-bottom: 1px solid rgb(238, 238, 238); padding: 5px 0px 10px 5px; margin-bottom: 10px;">
+            Add Controller</h1>
+
         <div class="controller has-text-centered">
             <input class="input" placeholder="Namespace (optional)" v-model="credentials.controller.namespace"/>
             <div style="margin-top: 5px">

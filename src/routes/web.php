@@ -1,11 +1,11 @@
 <?php 
-Route::get("demo", [
-    "as"            => "demo",
-    "uses"          => "PagesController@demo",
+Route::get("about", [
+    "as"            => "about",
+    "uses"          => "PagesController@about",
     "middlewares"   => [],
 ]);
 Route::get("demo", [
     "as"            => "demo",
-    "uses"          => "PagesController@demo",
+    "uses"          => "TestController@demo",
     "middlewares"   => [],
 ]);
