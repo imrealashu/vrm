@@ -43,21 +43,24 @@ class VisualRouteManagerServiceProvider extends ServiceProvider
         // loading views
         $this->loadViewsFrom($this->getPackagePath() . 'resources/views', 'vrm');
 
-        $data = [
+        // publish migration files
+        $this->publishes([
             $this->getPackagePath() . $this->migrations[0] => base_path($this->migrations[0]),
             $this->getPackagePath() . $this->migrations[1] => base_path($this->migrations[1]),
             $this->getPackagePath() . $this->migrations[2] => base_path($this->migrations[2]),
             $this->getPackagePath() . $this->migrations[3] => base_path($this->migrations[3]),
             $this->getPackagePath() . $this->migrations[4] => base_path($this->migrations[4]),
             $this->getPackagePath() . $this->migrations[5] => base_path($this->migrations[5]),
-        ];
-
-        // publish migration files
-        $this->publishes($data);
+        ]);
 
         // publish style files
         $this->publishes([
-            $this->getPackagePath() . 'resources/assets' => public_path('vendor/vrm')
+            $this->getPackagePath() . 'resources/assets' => public_path('vendor/vrm.php')
+        ], 'public');
+
+        // publish config file
+        $this->publishes([
+            $this->getPackagePath() . 'config/vrm.php' => base_path('config/vrm')
         ], 'public');
     }
 
@@ -95,7 +98,7 @@ class VisualRouteManagerServiceProvider extends ServiceProvider
     {
         Route::namespace($this->vrm_namespace)
             ->middleware(['web', 'vrm-auth'])
-            ->prefix('vrm')
+            ->prefix(config('vrm.path'))
             ->group($this->getPackagePath() . 'routes/vrm.php');
     }
 

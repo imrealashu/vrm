@@ -1,5 +1,7 @@
 <?php
 
 return [
-    'namespace' => 'App\Http\Controllers'
+    'path' => 'vrm',
+    'namespace' => 'App\Http\Controllers',
+    'password' => env('VRM_PASSWORD', 'secret')
 ];
