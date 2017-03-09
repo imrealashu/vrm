@@ -195,15 +195,10 @@
 
                 getFullPath(){
                     var ds = (this.designLayout.path.length) ? "/" : "";
-                    var middleware_prefix = this.designLayout.middlewares_group ? this.designLayout.middlewares_group.prefix + '/' : '';
+                    var middleware_prefix = this.designLayout.middlewares_group ? this.designLayout.middlewares_group.prefix + ds : '';
+                    var route_prefix = (this.designLayout.prefix && this.designLayout.prefix.id > 0) ? this.designLayout.prefix.name + ds : '';
 
-                    console.log(this.designLayout);
-
-                    var path = (this.designLayout.prefix && this.designLayout.prefix.id > 0)
-                        ? this.designLayout.prefix.name + ds + this.designLayout.path
-                        : this.designLayout.path;
-
-                    return `"${middleware_prefix}${path}"`;
+                    return `"${middleware_prefix}${route_prefix}${this.designLayout.path}"`;
                 },
 
                 applyPrefix(e){
