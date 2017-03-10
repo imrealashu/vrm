@@ -22,7 +22,7 @@
 
             <div id="nav-menu" class="nav-right nav-menu">
                 @if(session()->has('vrm-admin'))
-                    <a class="nav-item is-active" href="/vrm/logout">LOGOUT</a>
+                    <a class="nav-item is-active" href="vrm/logout">LOGOUT</a>
                 @endif
             </div>
         </nav>
